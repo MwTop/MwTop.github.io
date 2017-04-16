@@ -1,0 +1,707 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hello!" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="跨域的应用场景在 Web2.0 时代，许多应用需要聚合信息(比如来自google, 来自wikipedia的内容)，因此来自A站点的网页，往往需要读取来自B的内容，这是受到同源策略约束的。什么是同源政策(same-origin policy)协议相同(FTP、HTTP等)域名相同(包括每一级域名, foo.com和www.foo.com不同)端口相同以下行为受到限制(通常是跨域读操作): Cook">
+<meta name="keywords">
+<meta property="og:type" content="article">
+<meta property="og:title" content="同源政策与跨域详解">
+<meta property="og:url" content="http://MwTop.github.io/2017/04/14/postMessage/index.html">
+<meta property="og:site_name" content="随心所想">
+<meta property="og:description" content="跨域的应用场景在 Web2.0 时代，许多应用需要聚合信息(比如来自google, 来自wikipedia的内容)，因此来自A站点的网页，往往需要读取来自B的内容，这是受到同源策略约束的。什么是同源政策(same-origin policy)协议相同(FTP、HTTP等)域名相同(包括每一级域名, foo.com和www.foo.com不同)端口相同以下行为受到限制(通常是跨域读操作): Cook">
+<meta property="og:updated_time" content="2017-04-14T04:40:22.056Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="同源政策与跨域详解">
+<meta name="twitter:description" content="跨域的应用场景在 Web2.0 时代，许多应用需要聚合信息(比如来自google, 来自wikipedia的内容)，因此来自A站点的网页，往往需要读取来自B的内容，这是受到同源策略约束的。什么是同源政策(same-origin policy)协议相同(FTP、HTTP等)域名相同(包括每一级域名, foo.com和www.foo.com不同)端口相同以下行为受到限制(通常是跨域读操作): Cook">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://MwTop.github.io/2017/04/14/postMessage/"/>
+
+
+
+
+
+  <title> 同源政策与跨域详解 | 随心所想 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">随心所想</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">随笔记录，心得分享</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://MwTop.github.io/2017/04/14/postMessage/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Firefly">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/Nodepad.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="随心所想">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                同源政策与跨域详解
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-14T12:08:00+08:00">
+                2017-04-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/前端/" itemprop="url" rel="index">
+                    <span itemprop="name">前端</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>跨域的应用场景<br>在 Web2.0 时代，许多应用需要聚合信息(比如来自google, 来自wikipedia的内容)，因此来自A站点的网页，往往需要读取来自B的内容，这是受到同源策略约束的。<br>什么是同源政策(same-origin policy)<br>协议相同(FTP、HTTP等)<br>域名相同(包括每一级域名, foo.com和www.foo.com不同)<br>端口相同<br>以下行为受到限制(通常是跨域读操作):</p>
+<p>Cookie、LocalStorage、IndexDB 等存储性内容<br>DOM 节点<br>AJAX 请求不能发送<br>为什么需要同源政策<br>保护用户隐私信息，防止身份伪造等(读取Cookie)</p>
+<p>跨域写操作与跨域嵌入操作一般不受到约束。具体参考MDN</p>
+<p>非AJAX的跨站请求<br>document.domain 共享 DOM 与 存储</p>
+<p>对于只有前缀(二级、三级等域名)不同的网页，可以设置 document.domian 来规避同源策略</p>
+<p>1<br>2<br>3<br>4<br>5<br>6<br>//对于 s1.a.com 和 s2.a.com，设置以下内容可以获取cookie<br>document.domain = ‘a.com’<br>//document.domain 必须是域名的后缀，对于s1.a.com<br>document.domain = ‘a.com’   //Right!<br>document.domain = ‘b.com’   //Error! ‘b.com’ is not a suffix of ‘a.com’<br>具有相同domian的可以互相读取Cookie：</p>
+<p>1<br>2<br>3<br>4<br>5<br>6<br>// s1.a.com<br>document.cookie = “test1=hello”;<br>// s2.a.com<br>var allCookie = document.cookie;<br>//服务器设定cookie的domain<br>Set-Cookie: key=value; domain=.example.com; path=/<br>也可以读取iframe内的DOM节点</p>
+<p>fragment identifier 共享 DOM</p>
+<p>fragment identifier 指的是URL中hash符号#后面的内容，不引起页面刷新</p>
+<p>父窗口可以改变子窗口的fragment identifier，反之亦然</p>
+<p>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>//改变子窗口的url<br>var src = originURL + ‘#’ + data;<br>document.getElementById(‘myIFrame’).src = src;<br>//子窗口响应事件<br>window.onhashchange = function () {}<br>//子窗口改变父窗口的hash<br>parent.location.href= target + “#” + hash;<br>window.name</p>
+<p>window.name最早是用来规避cookie缺点设立的(cookie过小, API复杂)，window支持2MB以上大小</p>
+<p>name是window的一个属性，无论window的内容如何改变其值不发生变化，因此利用iframe标签页和window.name可以实现跨域</p>
+<p>首先要简单了解iframe的相关知识，iframe在网页中创建了一个内联框架，通过src属性指向其他网站，每一个iframe都有一个包裹他的window，他是主窗口的子窗口</p>
+<p>由此，跨站方案就非常简单了，我们首先声明一个iframe标签指向跨站的网站，在跨站的页面内设置window.name，当检测到onload(只运行一次)以后把src设置回同域站点然后读取</p>
+<p>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17<br>let iframe = document.createElement(‘iframe’);<br>iframe.style.display = ‘none’;<br>let state = 0;   //用state控制onload只运行一次，避免来回刷新<br>iframe.onload = function() {<br>    if (state === 0) {<br>        state = 1;<br>        iframe.contentWindow.location = ‘同源域名’<br>    } else if (state === 1) {<br>        let data = JSON.parse(iframe.contentWindow.name);<br>        //… do something with data<br>        document.body.removeChild(iframe)<br>    }<br>}<br>iframe.src = ‘跨域站点’;<br>document.body.appendChild(iframe)<br>这一解决方法的缺点主要在于需要使用iframe并且监听子窗口，影响了网页的性能</p>
+<p>window.postMessage</p>
+<p>HTML5中引入, 用于跨域的父子窗口通信，不受同源策略限制.<br>通过postMessage API可以实现对存储的读写，DOM的操作等</p>
+<p>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>var popup = window.open(‘<a href="http://bbb.com" target="_blank" rel="external">http://bbb.com</a>‘, ‘title’);<br>//父窗口向子窗口发送消息<br>popup.postMessage(‘Hello World!’, ‘<a href="http://bbb.com" target="_blank" rel="external">http://bbb.com</a>‘);<br>//子窗口向父窗口发送消息<br>window.opener.postMessage(‘Nice to see you’, ‘<a href="http://aaa.com" target="_blank" rel="external">http://aaa.com</a>‘);<br>//父子都可以监听message事件响应<br>window.addEventListener(‘message’, function(e) {<br>  console.log(e.data);<br>},false);<br>AJAX跨域<br>WebSocket</p>
+<p>WebSocket通信协议不实行同源政策</p>
+<p>JSONP</p>
+<p>JSONP优点是兼容性好，缺点是仅支持get方法具有局限性</p>
+<p>其设计思路是因为浏览器不对 <script> 标签进行限制，因此可以利用这一点来进行跨域请求。</p>
+<p>声明一个回调函数，其参数为要获取(服务器提供的data)，对参数进行操作(比如渲染进DOM)<br>create一个<script>标签动态加入DOM tree，在src的URL中向服务器传递该函数名<br>服务器返回一个js脚本文件，将数据包括在url中给的回调函数里，运行回调函数<br>CORS</p>
+<p>阮一峰的文章写的非常清晰易懂</p>
+<p>CORS要求浏览器(&gt;IE10)和服务器的同时支持，是跨域的根本解决方法，由浏览器自动完成<br>优点在于功能更加强大支持各种HTTP Method，缺点是兼容性不如JSONP</p>
+<p>简单请求</p>
+<p>定义</p>
+<p>满足以下全部2个条件的就是简单请求，否则是非简单请求</p>
+<p>使用以下三个方法之一: GET、POST、HEAD<br>HTTP头不超过以下几个字段<br>Accept<br>Accept-Language<br>Content-Language<br>Last-Event-ID<br>Content-Type：只限于三个值application/x-www-form-urlencoded、multipart/form-data、text/plain<br>流程</p>
+<p>浏览器将在请求头加入origin字段指定源，如果服务器支持并且该源在白名单里，将返回一个包含特殊头字段的响应，否则不包含这些特殊头字段，XMLHttpRequest 可以捕获错误，但是响应状态代码依然会是200</p>
+<p>多出的字段：</p>
+<p>Access-Control-Allow-Origin(必须): 值为 * 或者请求的origin<br>Access-Control-Allow-Credentials(可选): 值只能为true表明发送cookie，默认不发送cookie不包含该字段，需要设置xhr.withCredentials = true;<br>Access-Control-Expose-Headers(可选): XMLHttpRequest.getResponseHeader()方法只可以获取Cache-Control、Content-Language、Content-Type、Expires、Last-Modified、Pragma六个基本字段和该头字段指定的字段名的值<br>非简单请求</p>
+<p>预检请求(Preflight)</p>
+<p>对于非简单请求(非基本Method和Header，需要首先发送一个OPTIONS请求询问服务器是否支持<br>浏览器根据AJAX的请求Method和Header，自动加入字段：</p>
+<p>Origin: 跨域必须指定的Origin<br>Access-Control-Request-Method: 指定了请求要用到的方法，比如PUT<br>Access-Control-Request-Headers(可选): 一个逗号分隔的字符串，指定了可能的额外Header字段<br>服务器检查自身是否支持后，进行回应：</p>
+<p>否定预见请求: 返回没有任何CORS字段(Access-Control)的正常响应，可以用XMLHTTPRequest对象的 onerror 捕捉处理<br>肯定预见请求:</p>
+<ol>
+<li>Access-Control-Allow-Methods: GET, POST, PUT (回复支持的方法)</li>
+<li>Access-Control-Allow-Headers(如果请求具有): 逗号分隔的字符串，表明服务器支持的所有头信息字段，不限于浏览器在”预检”中请求的字段。</li>
+<li>Access-Control-Allow-Credentials: 是否传递cookie，同简单请求</li>
+<li>Access-Control-Max-Age(可选): 表面预检的有效期，有效期内不发送预检请求<br>正常请求</li>
+</ol>
+<p>在预检请求之后，正常请求与简单请求类似，请求具有Origin段，回复具有Access-Control-Allow-Origin等字段。</p>
+</script></p>
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/04/13/blog/" rel="prev" title="My-blog">
+                My-blog <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview sidebar-panel sidebar-panel-active">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/Nodepad.jpg"
+               alt="Firefly" />
+          <p class="site-author-name" itemprop="name">Firefly</p>
+           
+              <p class="site-description motion-element" itemprop="description">路漫漫其修远兮，吾将上下而求索!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">分类</span>
+              
+            </div>
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Firefly</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
