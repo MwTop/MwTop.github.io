@@ -202,43 +202,7 @@
 <li>对HTML5的理解，Web语义化，SEO</li>
 <li>页面加载的过程</li>
 <li>结构组织</li>
-<li>新增API 如本地存储、Canvas</li>
-</ul>
-<h1 id="CSS部分"><a href="#CSS部分" class="headerlink" title="CSS部分"></a>CSS部分</h1><ul>
-<li>经典的圣杯布局</li>
-<li>CSS3 transition transform animate</li>
-<li>w3c盒子模型 和 IE盒子模型，box-sizing属性</li>
-<li>BFC</li>
-<li>优先级</li>
-<li>less 与 sass</li>
-<li>background-* 系列属性，这个不要忽视了，还是很重要的</li>
-</ul>
-<h1 id="JS部分"><a href="#JS部分" class="headerlink" title="JS部分"></a>JS部分</h1><ul>
-<li>原型 闭包</li>
-<li>基本数据类型</li>
-<li>高阶函数</li>
-<li>JSON</li>
-<li>JSONP 跨域 iframe 通信</li>
-<li>Ajax</li>
-<li>原生DOM操作（比如 逆序DOM节点）</li>
-<li>事件捕捉，捕获，冒泡，代理</li>
-<li>Array常用函数</li>
-<li>String常用函数</li>
-<li>ES5 + ES6</li>
-<li>框架部分（大部分按照简历来）</li>
-<li>Angular脏检查机制</li>
-<li>手写Angular指令，知道其生命周期</li>
-<li>手动实现MVC（考察</li>
-<li>衍生部分</li>
-<li>HTTP1/2 理解、状态码、优化、缓存控制（必考）</li>
-<li>TCP三次握手，四次挥手</li>
-<li>XSS与CSRF（必考）</li>
-<li>学习经历和方法</li>
-<li>性能优化</li>
-<li>单元测试</li>
-<li>React + Redux</li>
-</ul>
-
+<li>新增API 如本地存储、Canvas
       
     </div>
     
@@ -254,6 +218,10 @@
       
       <div class="clearfix"></div>
     </div>
+      
+        <p class="article-more-link">
+          <a  href="/2017/04/19/front end/#more">more >></a>
+        </p>
       
     
   </div>
@@ -296,53 +264,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="跨域的应用场景"><a href="#跨域的应用场景" class="headerlink" title="跨域的应用场景"></a>跨域的应用场景</h1><p>在 Web2.0 时代，许多应用需要聚合信息(比如来自google, 来自wikipedia的内容)，因此来自A站点的网页，往往需要读取来自B的内容，这是受到同源策略约束的。<br>什么是同源政策(same-origin policy)<br>协议相同(FTP、HTTP等)<br>域名相同(包括每一级域名, foo.com和www.foo.com不同)<br>端口相同<br>以下行为受到限制(通常是跨域读操作):</p>
-<p>Cookie、LocalStorage、IndexDB 等存储性内容<br>DOM 节点<br>AJAX 请求不能发送<br>为什么需要同源政策<br>保护用户隐私信息，防止身份伪造等(读取Cookie)</p>
-<p>跨域写操作与跨域嵌入操作一般不受到约束。具体参考MDN</p>
-<p>非AJAX的跨站请求<br>document.domain 共享 DOM 与 存储</p>
-<p>对于只有前缀(二级、三级等域名)不同的网页，可以设置 document.domian 来规避同源策略<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">//对于 s1.a.com 和 s2.a.com，设置以下内容可以获取cookie</div><div class="line">document.domain = &apos;a.com&apos;</div><div class="line">//document.domain 必须是域名的后缀，对于s1.a.com</div><div class="line">document.domain = &apos;a.com&apos;   //Right!</div><div class="line">document.domain = &apos;b.com&apos;   //Error! &apos;b.com&apos; is not a suffix of &apos;a.com&apos;</div><div class="line">具有相同domian的可以互相读取Cookie：</div></pre></td></tr></table></figure></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">// s1.a.com</div><div class="line">document.cookie = &quot;test1=hello&quot;;</div><div class="line">// s2.a.com</div><div class="line">var allCookie = document.cookie;</div><div class="line">//服务器设定cookie的domain</div><div class="line">Set-Cookie: key=value; domain=.example.com; path=/</div></pre></td></tr></table></figure>
-<p>也可以读取iframe内的DOM节点</p>
-<p>fragment identifier 共享 DOM</p>
-<p>fragment identifier 指的是URL中hash符号#后面的内容，不引起页面刷新</p>
-<p>父窗口可以改变子窗口的fragment identifier，反之亦然</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">//改变子窗口的url</div><div class="line">var src = originURL + &apos;#&apos; + data;</div><div class="line">document.getElementById(&apos;myIFrame&apos;).src = src;</div><div class="line">//子窗口响应事件</div><div class="line">window.onhashchange = function () &#123;&#125;</div><div class="line">//子窗口改变父窗口的hash</div><div class="line">parent.location.href= target + &quot;#&quot; + hash;</div><div class="line">window.name</div></pre></td></tr></table></figure>
-<p>window.name最早是用来规避cookie缺点设立的(cookie过小, API复杂)，window支持2MB以上大小</p>
-<p>name是window的一个属性，无论window的内容如何改变其值不发生变化，因此利用iframe标签页和window.name可以实现跨域</p>
-<p>首先要简单了解iframe的相关知识，iframe在网页中创建了一个内联框架，通过src属性指向其他网站，每一个iframe都有一个包裹他的window，他是主窗口的子窗口</p>
-<p>由此，跨站方案就非常简单了，我们首先声明一个iframe标签指向跨站的网站，在跨站的页面内设置window.name，当检测到onload(只运行一次)以后把src设置回同域站点然后读取</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">let iframe = document.createElement(&apos;iframe&apos;);</div><div class="line">iframe.style.display = &apos;none&apos;;</div><div class="line">let state = 0;   //用state控制onload只运行一次，避免来回刷新</div><div class="line">iframe.onload = function() &#123;</div><div class="line">    if (state === 0) &#123;</div><div class="line">        state = 1;</div><div class="line">        iframe.contentWindow.location = &apos;同源域名&apos;</div><div class="line">    &#125; else if (state === 1) &#123;</div><div class="line">        let data = JSON.parse(iframe.contentWindow.name);</div><div class="line">        //... do something with data</div><div class="line">        document.body.removeChild(iframe)</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">iframe.src = &apos;跨域站点&apos;;</div><div class="line">document.body.appendChild(iframe);</div></pre></td></tr></table></figure>
-<p>这一解决方法的缺点主要在于需要使用iframe并且监听子窗口，影响了网页的性能</p>
-<p>window.postMessage</p>
-<p>HTML5中引入, 用于跨域的父子窗口通信，不受同源策略限制.<br>通过postMessage API可以实现对存储的读写，DOM的操作等</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">var popup = window.open(&apos;http://bbb.com&apos;, &apos;title&apos;);</div><div class="line">//父窗口向子窗口发送消息</div><div class="line">popup.postMessage(&apos;Hello World!&apos;, &apos;http://bbb.com&apos;);</div><div class="line">//子窗口向父窗口发送消息</div><div class="line">window.opener.postMessage(&apos;Nice to see you&apos;, &apos;http://aaa.com&apos;);</div><div class="line">//父子都可以监听message事件响应</div><div class="line">window.addEventListener(&apos;message&apos;, function(e) &#123;</div><div class="line">  console.log(e.data);</div><div class="line">&#125;,false);</div></pre></td></tr></table></figure>
-<p>AJAX跨域<br>WebSocket</p>
-<p>WebSocket通信协议不实行同源政策</p>
-<p>JSONP</p>
-<p>JSONP优点是兼容性好，缺点是仅支持get方法具有局限性</p>
-<p>其设计思路是因为浏览器不对 <script> 标签进行限制，因此可以利用这一点来进行跨域请求。</p>
-<p>声明一个回调函数，其参数为要获取(服务器提供的data)，对参数进行操作(比如渲染进DOM)<br>create一个<script>标签动态加入DOM tree，在src的URL中向服务器传递该函数名<br>服务器返回一个js脚本文件，将数据包括在url中给的回调函数里，运行回调函数<br>CORS</p>
-<p>阮一峰的文章写的非常清晰易懂</p>
-<p>CORS要求浏览器(&gt;IE10)和服务器的同时支持，是跨域的根本解决方法，由浏览器自动完成<br>优点在于功能更加强大支持各种HTTP Method，缺点是兼容性不如JSONP</p>
-<p>简单请求</p>
-<p>定义</p>
-<p>满足以下全部2个条件的就是简单请求，否则是非简单请求</p>
-<p>使用以下三个方法之一: GET、POST、HEAD<br>HTTP头不超过以下几个字段<br>Accept<br>Accept-Language<br>Content-Language<br>Last-Event-ID<br>Content-Type：只限于三个值application/x-www-form-urlencoded、multipart/form-data、text/plain<br>流程</p>
-<p>浏览器将在请求头加入origin字段指定源，如果服务器支持并且该源在白名单里，将返回一个包含特殊头字段的响应，否则不包含这些特殊头字段，XMLHttpRequest 可以捕获错误，但是响应状态代码依然会是200</p>
-<p>多出的字段：</p>
-<p>Access-Control-Allow-Origin(必须): 值为 * 或者请求的origin<br>Access-Control-Allow-Credentials(可选): 值只能为true表明发送cookie，默认不发送cookie不包含该字段，需要设置xhr.withCredentials = true;<br>Access-Control-Expose-Headers(可选): XMLHttpRequest.getResponseHeader()方法只可以获取Cache-Control、Content-Language、Content-Type、Expires、Last-Modified、Pragma六个基本字段和该头字段指定的字段名的值<br>非简单请求</p>
-<p>预检请求(Preflight)</p>
-<p>对于非简单请求(非基本Method和Header，需要首先发送一个OPTIONS请求询问服务器是否支持<br>浏览器根据AJAX的请求Method和Header，自动加入字段：</p>
-<p>Origin: 跨域必须指定的Origin<br>Access-Control-Request-Method: 指定了请求要用到的方法，比如PUT<br>Access-Control-Request-Headers(可选): 一个逗号分隔的字符串，指定了可能的额外Header字段<br>服务器检查自身是否支持后，进行回应：</p>
-<p>否定预见请求: 返回没有任何CORS字段(Access-Control)的正常响应，可以用XMLHTTPRequest对象的 onerror 捕捉处理<br>肯定预见请求:</p>
-<ol>
-<li>Access-Control-Allow-Methods: GET, POST, PUT (回复支持的方法)</li>
-<li>Access-Control-Allow-Headers(如果请求具有): 逗号分隔的字符串，表明服务器支持的所有头信息字段，不限于浏览器在”预检”中请求的字段。</li>
-<li>Access-Control-Allow-Credentials: 是否传递cookie，同简单请求</li>
-<li>Access-Control-Max-Age(可选): 表面预检的有效期，有效期内不发送预检请求<br>正常请求</li>
-</ol>
-<p>在预检请求之后，正常请求与简单请求类似，请求具有Origin段，回复具有Access-Control-Allow-Origin等字段。</p>
-</script></p>
+        <h1 id="跨域的应用场景"><a href="#跨域的应用场景" class="headerlink" title="跨域的应用场景"></a>跨域的应用场景</h1><p>在 Web2.0 时代，许多应用需要聚合信息(比如来自google, 来自wikipedia的内容)，因此来自A站点的网页，往往需要读取来自B的内容，这是受到同源策略约束的。<br>什么是同源政策(same-origin policy)<br>协议相同(FTP、HTTP等)<br>域名相同(包括每一级域名, foo.com和www.foo.com不同)<br>端口相同<br>以下行为受到限制(通常是跨域读操作):<br>
       
     </div>
     
@@ -358,6 +280,10 @@
       
       <div class="clearfix"></div>
     </div>
+      
+        <p class="article-more-link">
+          <a  href="/2017/04/14/postMessage/#more">more >></a>
+        </p>
       
     
   </div>
@@ -400,16 +326,9 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="Github-Pages设置"><a href="#Github-Pages设置" class="headerlink" title="Github Pages设置"></a>Github Pages设置</h1><p>什么是Github Pages</p>
-<p>GitHub Pages 本用于介绍托管在GitHub的项目，不过，由于他的空间免费稳定，用来做搭建一个博客再好不过了。</p>
-<p>每个帐号只能有一个仓库来存放个人主页，而且仓库的名字必须是username/username.github.io，这是特殊的命名约定。你可以通过<a href="http://username.github.io" target="_blank" rel="external">http://username.github.io</a> 来访问你的个人主页。</p>
-<p>这里特别提醒一下，需要注意的个人主页的网站内容是在master分支下的。</p>
-<p>创建自己的Github Pages</p>
-<p>注册GitHub及使用Github Pages的过程已经有很多文章讲过，在此不再详述，可以参考：</p>
-<p>一步步在GitHub上创建博客主页 全系列</p>
-<p>如何搭建一个独立博客——简明Github Pages与Hexo教程</p>
-<p>在这里我创建了一个github repo叫做 jiji262.github.io. 创建完成之后，需要有一次提交(git commit)操作，然后就可以通过链接<a href="http://jiji262.github.io/" target="_blank" rel="external">http://jiji262.github.io/</a> 访问了。（现在还没有内容，别着急）</p>
-
+        <h1 id="Github-Pages设置"><a href="#Github-Pages设置" class="headerlink" title="Github Pages设置"></a>Github Pages设置</h1><h2 id="什么是Github-Pages"><a href="#什么是Github-Pages" class="headerlink" title="什么是Github Pages"></a>什么是Github Pages</h2><p>GitHub Pages 本用于介绍托管在GitHub的项目，不过，由于他的空间免费稳定，用来做搭建一个博客再好不过了。</p>
+<p>每个帐号只能有一个仓库来存放个人主页，而且仓库的名字必须是username/username.github.io，这是特殊的命名约定。你可以通过<a href="http://username.github.io">http://username.github.io</a> 来访问你的个人主页。</p>
+<p>这里特别提醒一下，需要注意的个人主页的网站内容是在master分支下的。<br>
       
     </div>
     
@@ -425,6 +344,10 @@
       
       <div class="clearfix"></div>
     </div>
+      
+        <p class="article-more-link">
+          <a  href="/2017/04/13/blog/#more">more >></a>
+        </p>
       
     
   </div>

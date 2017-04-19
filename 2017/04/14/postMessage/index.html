@@ -9,17 +9,17 @@
   
 
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="跨域的应用场景在 Web2.0 时代，许多应用需要聚合信息(比如来自google, 来自wikipedia的内容)，因此来自A站点的网页，往往需要读取来自B的内容，这是受到同源策略约束的。什么是同源政策(same-origin policy)协议相同(FTP、HTTP等)域名相同(包括每一级域名, foo.com和www.foo.com不同)端口相同以下行为受到限制(通常是跨域读操作): Cook">
+  <meta name="description" content="跨域的应用场景在 Web2.0 时代，许多应用需要聚合信息(比如来自google, 来自wikipedia的内容)，因此来自A站点的网页，往往需要读取来自B的内容，这是受到同源策略约束的。什么是同源政策(same-origin policy)协议相同(FTP、HTTP等)域名相同(包括每一级域名, foo.com和www.foo.com不同)端口相同以下行为受到限制(通常是跨域读操作):">
 <meta name="keywords">
 <meta property="og:type" content="article">
 <meta property="og:title" content="同源政策与跨域详解">
 <meta property="og:url" content="http://MwTop.github.io/2017/04/14/postMessage/index.html">
 <meta property="og:site_name" content="随心所想">
-<meta property="og:description" content="跨域的应用场景在 Web2.0 时代，许多应用需要聚合信息(比如来自google, 来自wikipedia的内容)，因此来自A站点的网页，往往需要读取来自B的内容，这是受到同源策略约束的。什么是同源政策(same-origin policy)协议相同(FTP、HTTP等)域名相同(包括每一级域名, foo.com和www.foo.com不同)端口相同以下行为受到限制(通常是跨域读操作): Cook">
-<meta property="og:updated_time" content="2017-04-19T10:56:42.715Z">
+<meta property="og:description" content="跨域的应用场景在 Web2.0 时代，许多应用需要聚合信息(比如来自google, 来自wikipedia的内容)，因此来自A站点的网页，往往需要读取来自B的内容，这是受到同源策略约束的。什么是同源政策(same-origin policy)协议相同(FTP、HTTP等)域名相同(包括每一级域名, foo.com和www.foo.com不同)端口相同以下行为受到限制(通常是跨域读操作):">
+<meta property="og:updated_time" content="2017-04-19T12:00:47.052Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="同源政策与跨域详解">
-<meta name="twitter:description" content="跨域的应用场景在 Web2.0 时代，许多应用需要聚合信息(比如来自google, 来自wikipedia的内容)，因此来自A站点的网页，往往需要读取来自B的内容，这是受到同源策略约束的。什么是同源政策(same-origin policy)协议相同(FTP、HTTP等)域名相同(包括每一级域名, foo.com和www.foo.com不同)端口相同以下行为受到限制(通常是跨域读操作): Cook">
+<meta name="twitter:description" content="跨域的应用场景在 Web2.0 时代，许多应用需要聚合信息(比如来自google, 来自wikipedia的内容)，因此来自A站点的网页，往往需要读取来自B的内容，这是受到同源策略约束的。什么是同源政策(same-origin policy)协议相同(FTP、HTTP等)域名相同(包括每一级域名, foo.com和www.foo.com不同)端口相同以下行为受到限制(通常是跨域读操作):">
   
     <link rel="alternative" href="/atom.xml" title="随心所想" type="application/atom+xml">
   
@@ -208,8 +208,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="跨域的应用场景"><a href="#跨域的应用场景" class="headerlink" title="跨域的应用场景"></a>跨域的应用场景</h1><p>在 Web2.0 时代，许多应用需要聚合信息(比如来自google, 来自wikipedia的内容)，因此来自A站点的网页，往往需要读取来自B的内容，这是受到同源策略约束的。<br>什么是同源政策(same-origin policy)<br>协议相同(FTP、HTTP等)<br>域名相同(包括每一级域名, foo.com和www.foo.com不同)<br>端口相同<br>以下行为受到限制(通常是跨域读操作):</p>
-<p>Cookie、LocalStorage、IndexDB 等存储性内容<br>DOM 节点<br>AJAX 请求不能发送<br>为什么需要同源政策<br>保护用户隐私信息，防止身份伪造等(读取Cookie)</p>
+        <h1 id="跨域的应用场景"><a href="#跨域的应用场景" class="headerlink" title="跨域的应用场景"></a>跨域的应用场景</h1><p>在 Web2.0 时代，许多应用需要聚合信息(比如来自google, 来自wikipedia的内容)，因此来自A站点的网页，往往需要读取来自B的内容，这是受到同源策略约束的。<br>什么是同源政策(same-origin policy)<br>协议相同(FTP、HTTP等)<br>域名相同(包括每一级域名, foo.com和www.foo.com不同)<br>端口相同<br>以下行为受到限制(通常是跨域读操作):<br><a id="more"></a><br>Cookie、LocalStorage、IndexDB 等存储性内容<br>DOM 节点<br>AJAX 请求不能发送<br>为什么需要同源政策<br>保护用户隐私信息，防止身份伪造等(读取Cookie)</p>
 <p>跨域写操作与跨域嵌入操作一般不受到约束。具体参考MDN</p>
 <p>非AJAX的跨站请求<br>document.domain 共享 DOM 与 存储</p>
 <p>对于只有前缀(二级、三级等域名)不同的网页，可以设置 document.domian 来规避同源策略<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">//对于 s1.a.com 和 s2.a.com，设置以下内容可以获取cookie</div><div class="line">document.domain = &apos;a.com&apos;</div><div class="line">//document.domain 必须是域名的后缀，对于s1.a.com</div><div class="line">document.domain = &apos;a.com&apos;   //Right!</div><div class="line">document.domain = &apos;b.com&apos;   //Error! &apos;b.com&apos; is not a suffix of &apos;a.com&apos;</div><div class="line">具有相同domian的可以互相读取Cookie：</div></pre></td></tr></table></figure></p>
