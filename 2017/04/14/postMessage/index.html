@@ -94,7 +94,7 @@
 <meta property="og:url" content="http://MwTop.github.io/2017/04/14/postMessage/index.html">
 <meta property="og:site_name" content="随心所想">
 <meta property="og:description" content="跨域的应用场景在 Web2.0 时代，许多应用需要聚合信息(比如来自google, 来自wikipedia的内容)，因此来自A站点的网页，往往需要读取来自B的内容，这是受到同源策略约束的。什么是同源政策(same-origin policy)协议相同(FTP、HTTP等)域名相同(包括每一级域名, foo.com和www.foo.com不同)端口相同以下行为受到限制(通常是跨域读操作): Cook">
-<meta property="og:updated_time" content="2017-04-14T04:40:22.056Z">
+<meta property="og:updated_time" content="2017-04-19T10:56:42.715Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="同源政策与跨域详解">
 <meta name="twitter:description" content="跨域的应用场景在 Web2.0 时代，许多应用需要聚合信息(比如来自google, 来自wikipedia的内容)，因此来自A站点的网页，往往需要读取来自B的内容，这是受到同源策略约束的。什么是同源政策(same-origin policy)协议相同(FTP、HTTP等)域名相同(包括每一级域名, foo.com和www.foo.com不同)端口相同以下行为受到限制(通常是跨域读操作): Cook">
@@ -344,25 +344,27 @@
       
 
       
-        <p>跨域的应用场景<br>在 Web2.0 时代，许多应用需要聚合信息(比如来自google, 来自wikipedia的内容)，因此来自A站点的网页，往往需要读取来自B的内容，这是受到同源策略约束的。<br>什么是同源政策(same-origin policy)<br>协议相同(FTP、HTTP等)<br>域名相同(包括每一级域名, foo.com和www.foo.com不同)<br>端口相同<br>以下行为受到限制(通常是跨域读操作):</p>
+        <h1 id="跨域的应用场景"><a href="#跨域的应用场景" class="headerlink" title="跨域的应用场景"></a>跨域的应用场景</h1><p>在 Web2.0 时代，许多应用需要聚合信息(比如来自google, 来自wikipedia的内容)，因此来自A站点的网页，往往需要读取来自B的内容，这是受到同源策略约束的。<br>什么是同源政策(same-origin policy)<br>协议相同(FTP、HTTP等)<br>域名相同(包括每一级域名, foo.com和www.foo.com不同)<br>端口相同<br>以下行为受到限制(通常是跨域读操作):</p>
 <p>Cookie、LocalStorage、IndexDB 等存储性内容<br>DOM 节点<br>AJAX 请求不能发送<br>为什么需要同源政策<br>保护用户隐私信息，防止身份伪造等(读取Cookie)</p>
 <p>跨域写操作与跨域嵌入操作一般不受到约束。具体参考MDN</p>
 <p>非AJAX的跨站请求<br>document.domain 共享 DOM 与 存储</p>
-<p>对于只有前缀(二级、三级等域名)不同的网页，可以设置 document.domian 来规避同源策略</p>
-<p>1<br>2<br>3<br>4<br>5<br>6<br>//对于 s1.a.com 和 s2.a.com，设置以下内容可以获取cookie<br>document.domain = ‘a.com’<br>//document.domain 必须是域名的后缀，对于s1.a.com<br>document.domain = ‘a.com’   //Right!<br>document.domain = ‘b.com’   //Error! ‘b.com’ is not a suffix of ‘a.com’<br>具有相同domian的可以互相读取Cookie：</p>
-<p>1<br>2<br>3<br>4<br>5<br>6<br>// s1.a.com<br>document.cookie = “test1=hello”;<br>// s2.a.com<br>var allCookie = document.cookie;<br>//服务器设定cookie的domain<br>Set-Cookie: key=value; domain=.example.com; path=/<br>也可以读取iframe内的DOM节点</p>
+<p>对于只有前缀(二级、三级等域名)不同的网页，可以设置 document.domian 来规避同源策略<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">//对于 s1.a.com 和 s2.a.com，设置以下内容可以获取cookie</div><div class="line">document.domain = &apos;a.com&apos;</div><div class="line">//document.domain 必须是域名的后缀，对于s1.a.com</div><div class="line">document.domain = &apos;a.com&apos;   //Right!</div><div class="line">document.domain = &apos;b.com&apos;   //Error! &apos;b.com&apos; is not a suffix of &apos;a.com&apos;</div><div class="line">具有相同domian的可以互相读取Cookie：</div></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">// s1.a.com</div><div class="line">document.cookie = &quot;test1=hello&quot;;</div><div class="line">// s2.a.com</div><div class="line">var allCookie = document.cookie;</div><div class="line">//服务器设定cookie的domain</div><div class="line">Set-Cookie: key=value; domain=.example.com; path=/</div></pre></td></tr></table></figure>
+<p>也可以读取iframe内的DOM节点</p>
 <p>fragment identifier 共享 DOM</p>
 <p>fragment identifier 指的是URL中hash符号#后面的内容，不引起页面刷新</p>
 <p>父窗口可以改变子窗口的fragment identifier，反之亦然</p>
-<p>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>//改变子窗口的url<br>var src = originURL + ‘#’ + data;<br>document.getElementById(‘myIFrame’).src = src;<br>//子窗口响应事件<br>window.onhashchange = function () {}<br>//子窗口改变父窗口的hash<br>parent.location.href= target + “#” + hash;<br>window.name</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">//改变子窗口的url</div><div class="line">var src = originURL + &apos;#&apos; + data;</div><div class="line">document.getElementById(&apos;myIFrame&apos;).src = src;</div><div class="line">//子窗口响应事件</div><div class="line">window.onhashchange = function () &#123;&#125;</div><div class="line">//子窗口改变父窗口的hash</div><div class="line">parent.location.href= target + &quot;#&quot; + hash;</div><div class="line">window.name</div></pre></td></tr></table></figure>
 <p>window.name最早是用来规避cookie缺点设立的(cookie过小, API复杂)，window支持2MB以上大小</p>
 <p>name是window的一个属性，无论window的内容如何改变其值不发生变化，因此利用iframe标签页和window.name可以实现跨域</p>
 <p>首先要简单了解iframe的相关知识，iframe在网页中创建了一个内联框架，通过src属性指向其他网站，每一个iframe都有一个包裹他的window，他是主窗口的子窗口</p>
 <p>由此，跨站方案就非常简单了，我们首先声明一个iframe标签指向跨站的网站，在跨站的页面内设置window.name，当检测到onload(只运行一次)以后把src设置回同域站点然后读取</p>
-<p>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17<br>let iframe = document.createElement(‘iframe’);<br>iframe.style.display = ‘none’;<br>let state = 0;   //用state控制onload只运行一次，避免来回刷新<br>iframe.onload = function() {<br>    if (state === 0) {<br>        state = 1;<br>        iframe.contentWindow.location = ‘同源域名’<br>    } else if (state === 1) {<br>        let data = JSON.parse(iframe.contentWindow.name);<br>        //… do something with data<br>        document.body.removeChild(iframe)<br>    }<br>}<br>iframe.src = ‘跨域站点’;<br>document.body.appendChild(iframe)<br>这一解决方法的缺点主要在于需要使用iframe并且监听子窗口，影响了网页的性能</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">let iframe = document.createElement(&apos;iframe&apos;);</div><div class="line">iframe.style.display = &apos;none&apos;;</div><div class="line">let state = 0;   //用state控制onload只运行一次，避免来回刷新</div><div class="line">iframe.onload = function() &#123;</div><div class="line">    if (state === 0) &#123;</div><div class="line">        state = 1;</div><div class="line">        iframe.contentWindow.location = &apos;同源域名&apos;</div><div class="line">    &#125; else if (state === 1) &#123;</div><div class="line">        let data = JSON.parse(iframe.contentWindow.name);</div><div class="line">        //... do something with data</div><div class="line">        document.body.removeChild(iframe)</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">iframe.src = &apos;跨域站点&apos;;</div><div class="line">document.body.appendChild(iframe);</div></pre></td></tr></table></figure>
+<p>这一解决方法的缺点主要在于需要使用iframe并且监听子窗口，影响了网页的性能</p>
 <p>window.postMessage</p>
 <p>HTML5中引入, 用于跨域的父子窗口通信，不受同源策略限制.<br>通过postMessage API可以实现对存储的读写，DOM的操作等</p>
-<p>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>var popup = window.open(‘<a href="http://bbb.com" target="_blank" rel="external">http://bbb.com</a>‘, ‘title’);<br>//父窗口向子窗口发送消息<br>popup.postMessage(‘Hello World!’, ‘<a href="http://bbb.com" target="_blank" rel="external">http://bbb.com</a>‘);<br>//子窗口向父窗口发送消息<br>window.opener.postMessage(‘Nice to see you’, ‘<a href="http://aaa.com" target="_blank" rel="external">http://aaa.com</a>‘);<br>//父子都可以监听message事件响应<br>window.addEventListener(‘message’, function(e) {<br>  console.log(e.data);<br>},false);<br>AJAX跨域<br>WebSocket</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">var popup = window.open(&apos;http://bbb.com&apos;, &apos;title&apos;);</div><div class="line">//父窗口向子窗口发送消息</div><div class="line">popup.postMessage(&apos;Hello World!&apos;, &apos;http://bbb.com&apos;);</div><div class="line">//子窗口向父窗口发送消息</div><div class="line">window.opener.postMessage(&apos;Nice to see you&apos;, &apos;http://aaa.com&apos;);</div><div class="line">//父子都可以监听message事件响应</div><div class="line">window.addEventListener(&apos;message&apos;, function(e) &#123;</div><div class="line">  console.log(e.data);</div><div class="line">&#125;,false);</div></pre></td></tr></table></figure>
+<p>AJAX跨域<br>WebSocket</p>
 <p>WebSocket通信协议不实行同源政策</p>
 <p>JSONP</p>
 <p>JSONP优点是兼容性好，缺点是仅支持get方法具有局限性</p>
@@ -424,6 +426,10 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
+              <a href="/2017/04/19/front end/" rel="next" title="Front End">
+                <i class="fa fa-chevron-left"></i> Front End
+              </a>
+            
           </div>
 
           <span class="post-nav-divider"></span>
@@ -479,8 +485,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/Nodepad.jpg"
@@ -495,7 +510,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-count">3</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -533,6 +548,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#跨域的应用场景"><span class="nav-number">1.</span> <span class="nav-text">跨域的应用场景</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
